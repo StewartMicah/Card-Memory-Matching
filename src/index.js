@@ -1,22 +1,34 @@
-import React, {Component} from 'react'
-import ReactDOM from 'react-dom'
+import React, {useState, useEffect} from 'react'
+import { createRoot } from 'react-dom/client';
 import './index.css'
+import _ from 'lodash'
 
-const cardStyle = {
+
+const App = () => {
+  const [cards, setcards] = useState([]);
+
+  useEffect(() => {
+    let cardFace = [];
+
+    for (let i = 0; i < 20; i++){
+      cardFace.push(i);
+      cardFace.push(i);
+      console.log(cardFace);
+    }
+
+    setcards(_.shuffle(cardFace))
+  }, [])
+  const rows  = _.chunk(cards, 5)
+  console.log(rows)
+  return (
+    <div>
+      {rows.map((Cards) => <div className='cards'>{Cards.map((card) => <div className='card'>{card}</div>)}</div>)}
+    </div>
+  )
   
 }
 
 
-class App extends Component {
-  render() {
-    return (
-      <div className="card">
-      <div className="container">
-        <h4><b>9</b></h4> 
-      </div>
-    </div>
-    )
-  }
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<App/>);
