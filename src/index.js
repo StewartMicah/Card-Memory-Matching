@@ -10,7 +10,7 @@ const App = () => {
   useEffect(() => {
     let cardFace = [];
 
-    for (let i = 0; i < 20; i++){
+    for (let i = 0; i < 15; i++){
       cardFace.push(i);
       cardFace.push(i);
       console.log(cardFace);
@@ -18,11 +18,11 @@ const App = () => {
 
     setcards(_.shuffle(cardFace))
   }, [])
-  const rows  = _.chunk(cards, 5)
+  const rows  = _.chunk(cards, 6)
   console.log(rows)
   return (
     <div>
-      {rows.map((Cards) => <div className='cards'>{Cards.map((card) => <div className='card'>{card}</div>)}</div>)}
+      {rows.map((Cards) => <div className='cards'>{Cards.map((card) => <div className='card'><div>{card}</div></div>)}</div>)}
     </div>
   )
   
