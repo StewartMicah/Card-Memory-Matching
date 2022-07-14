@@ -3,29 +3,52 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import _ from "lodash";
 
-const App = () => {
+const StartScreen = () => {
+  const displayGame = () => {
+    root.render(<Game />);
+  };
+
+  return (
+    <div className="start-main">
+      <div className="start-text" onClick={() => displayGame()}>
+        Start Game
+      </div>
+    </div>
+  );
+};
+
+const gameOver = () => {
+  return (
+    <div>
+
+    </div>
+  )
+}
+
+const Game = () => {
   const [cards, setcards] = useState([]);
   const [score, setScore] = useState(0);
+  const [correct, setCorrect] = useState(0);
   let Flipped = [];
   let checkId = [];
   let checkValue = [];
   useEffect(() => {
     let cardData = [];
 
-    for (let i = 0; i < 15; i++) {
+    for (var i = 0; i < 18; i++) {
       cardData.push({
         face: i,
         value: i,
-        id: _.uniqueId(),
+        id: i,
       });
       cardData.push({
         face: i,
         value: i,
-        id: _.uniqueId(),
+        id: i + 18,
       });
     }
-
-    setcards(_.shuffle(cardData));
+    setcards(cardData);
+    // setcards(_.shuffle(cardData));
   }, []);
   const rows = _.chunk(cards, 6);
 
@@ -40,9 +63,26 @@ const App = () => {
   };
 
   const flipHandler = (id1, id2) => {
+    
     Flipped.push(id1, id2);
     Flipped.forEach(show);
   };
+
+  const startGame = () => {
+    var x = 0;
+
+    for (x = 0; x < 36; x++) {
+      show(x);
+      setTimeout(function () {}, 1000);
+    }
+  };
+
+  const CheckGameCompletion = () => {
+    if (correct == 18){
+      root.render(<gameOver/>)
+    }
+    console.log(correct)
+  }
 
   const clickHandler = (clickedId, clickedValue) => {
     for (var x = 0; x < Flipped.length; x++) {
@@ -67,6 +107,9 @@ const App = () => {
             flipHandler(checkId[0], checkId[1]);
             checkId.splice(0, 2);
             checkValue.splice(0, 2);
+            setScore(score + 1);
+            setCorrect(correct + 1);
+            CheckGameCompletion()
           } else {
             checkId.forEach(hide);
             checkId.splice(0, 2);
@@ -77,27 +120,8 @@ const App = () => {
         }, 1000);
       }
     }
+    
   };
-
-  console.log();
-  // return (
-  //   <div id="container">
-  //     <div id="score">Turns: {score}</div>
-  //     {rows.map((Cards) => (
-  //       <div className="cards">
-  //         {Cards.map((card) => (
-  //           <div
-  //             id={card.id}
-  //             className="card"
-  //             onClick={() => clickHandler(card.id, card.value)}
-  //           >
-  //             <div className="cardFace">{card.face}</div>
-  //           </div>
-  //         ))}
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
 
   return (
     <div id="container">
@@ -110,12 +134,7 @@ const App = () => {
               className="card"
               onClick={() => clickHandler(card.id, card.value)}
             >
-              <div class="flip-card">
-                <div class="flip-card-inner">
-                  <div class="flip-card-front"></div>
-                  <div class="flip-card-back">{card.face}</div>
-                </div>
-              </div>
+              <div className="cardFace">{card.face}</div>
             </div>
           ))}
         </div>
@@ -124,6 +143,6 @@ const App = () => {
   );
 };
 
-const container = document.getElementById("root");
-const root = createRoot(container);
-root.render(<App />);
+const rootEl = document.getElementById("root");
+const root = createRoot(rootEl);
+root.render(<StartScreen />);
