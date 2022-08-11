@@ -48,7 +48,7 @@ const Game = () => {
       });
     }
     setcards(cardData);
-    // setcards(_.shuffle(cardData));
+    setcards(_.shuffle(cardData));
   }, []);
   const rows = _.chunk(cards, 6);
 
